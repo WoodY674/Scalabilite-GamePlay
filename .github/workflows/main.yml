@@ -36,7 +36,7 @@ jobs:
 
   Deploy-Production:
     name: 🚀 Deploy to Vercel
-    needs: [ Lint-Verification, Tests ]
+    needs: [ Tests ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
