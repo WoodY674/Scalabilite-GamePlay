@@ -45,24 +45,31 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 
 		window.addEventListener('keydown', handleKeyDown)
 
+        const canvasWidth = canvas.width
+        const canvasHeight = canvas.height
+
 		const gameLoop = () => {
+            // Calculate the camera position to center the player
+            const cameraX = player.x - canvasWidth / 2
+            const cameraY = player.y - canvasHeight / 2
+
 			// Clear the canvas
-			ctx.clearRect(0, 0, canvas.width, canvas.height)
+			ctx.clearRect(0, 0, canvasWidth, canvasHeight)
 
 			// Set background color from gameData
 			ctx.fillStyle = gameData.mapBackground || 'blue'
-			ctx.fillRect(0, 0, canvas.width, canvas.height)
+			ctx.fillRect(0, 0, canvasWidth, canvasHeight)
 
 			// Draw the player
 			ctx.fillStyle = 'red'
-			ctx.fillRect(player.x, player.y, 20, 20)
+            ctx.fillRect(player.x - cameraX, player.y - cameraY, 20, 20)
 
 			// Draw treasures
 			ctx.fillStyle = 'gold'
 			gameData.treasures.forEach((treasure) => {
 				const posX = parseInt(treasure.posX)
 				const posY = parseInt(treasure.posY)
-				ctx.fillRect(posX, posY, 20, 20)
+                ctx.fillRect(posX - cameraX, posY - cameraY, 20, 20)
 			})
 
 			// Request animation frame
