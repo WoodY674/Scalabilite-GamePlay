@@ -1,10 +1,14 @@
 import express, {Express} from 'express';
+import swaggerUi from 'swagger-ui-express';
+import {swaggerDocument} from "./swagger/swagger";
 import {corsApp} from "./cors/corsApp";
 const port: number = 3000;
 const app = express();
 app.use(express.json());
 const httpServer: Express = require('http').createServer(app);
 const io = require('socket.io')(httpServer, corsApp);
+app.use('/docs', swaggerUi.serve, swaggerDocument);
+
 
 
 io.on('connection', (socket: { on: (arg0: string, arg1: (message: string) => void) => void; id: string; }) => {

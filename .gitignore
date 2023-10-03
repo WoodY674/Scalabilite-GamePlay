@@ -1,1 +1,3 @@
 ﻿back/node_modules
+*.idea/
+*.idea
