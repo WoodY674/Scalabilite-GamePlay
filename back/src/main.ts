@@ -1,7 +1,7 @@
 import express, {Express} from 'express';
 import swaggerUi from 'swagger-ui-express';
-import {swaggerDocument} from "./swagger/swagger";
-import {corsApp} from "./cors/corsApp";
+import {swaggerDocument} from "./utils/swagger/swagger";
+import {corsApp} from "./utils/cors/corsApp";
 const port: number = 3000;
 const app = express();
 app.use(express.json());
@@ -9,7 +9,7 @@ const httpServer: Express = require('http').createServer(app);
 const io = require('socket.io')(httpServer, corsApp);
 app.use('/docs', swaggerUi.serve, swaggerDocument);
 
-
+app.use('/api', require('./routes/index.routes'));
 
 io.on('connection', (socket: { on: (arg0: string, arg1: (message: string) => void) => void; id: string; }) => {
     console.log('a user connected');
