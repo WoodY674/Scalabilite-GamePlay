@@ -9,14 +9,17 @@ const Home: NextPage = () => {
 		height: '600',
 		treasures: [
 			{
+                id: 1,
 				posX: '100',
 				posY: '100',
 			},
 			{
+                id: 2,
 				posX: '200',
 				posY: '200',
 			},
 			{
+                id: 3,
 				posX: '300',
 				posY: '300',
 			},
