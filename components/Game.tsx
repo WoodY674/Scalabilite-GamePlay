@@ -101,12 +101,14 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
                 const posX = parseInt(treasure.posX);
                 const posY = parseInt(treasure.posY);
 
-                if (player.x == posX && player.y && posY) {
+                if (player.x == posX && player.y == posY) {
                     // Le joueur a atteint un trésor, alors retirez-le du tableau
                     gameData.treasures.splice(index, 1);
-                    socket.emit('claim', gameData.treasures[index].id)
+                    socket.emit('claim', treasure.id)
                 }
             });
+
+
 
             // ...
 
