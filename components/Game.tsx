@@ -3,13 +3,16 @@ import { GameProps } from '@/models/props/game.props'
 import { Player } from '@/models/interfaces/player.interface'
 import { io } from 'socket.io-client'
 
-const Game: React.FC<GameProps> = ({ gameData }) => {
+
+
+    const Game: React.FC<GameProps> = ({ gameData }) => {
 	const [player, setPlayer] = useState({
 		x: 40,
 		y: 40,
 		speed: 5,
 	})
 
+    const [score, setScore] = useState()
 	const [otherPlayers, setOtherPlayers] = useState<Player[]>([])
 
 	const canvasRef = useRef<HTMLCanvasElement | null>(null)
@@ -80,6 +83,19 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 			})
 		})
 */
+
+            /*// Configuration du WebSocket
+        //const socket = io(`ws://${process.env.NEXT_PUBLIC_BACK_URL}`);
+        socket.on('connect', () => {
+        // Lorsque la connexion WebSocket est établie, envoyez l'ID du joueur au serveur pour demander le score
+        socket.emit('getPlayerScore', { playerId: 'ID_DU_JOUEUR_ACTUEL' });
+  });
+
+        socket.on('playerScore', (
+                data: { score: React.SetStateAction<undefined>; }) => {
+            // Mise à jour du score du joueur actuel
+        setScore(data.score);
+  });*/
 
 		const gameLoop = () => {
             // Calculate the camera position to center the player
