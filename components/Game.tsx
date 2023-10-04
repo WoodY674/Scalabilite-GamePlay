@@ -37,7 +37,13 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 
 		const socket = socketRef.current
 
-		const handleKeyDown = (e: KeyboardEvent) => {
+        const myPlayerImage = new Image();
+        myPlayerImage.src = 'ic_launcher.png';
+
+        const treasureImage = new Image();
+        treasureImage.src = 'ic_launcher.png';
+
+        const handleKeyDown = (e: KeyboardEvent) => {
 			switch (e.key) {
 				case 'ArrowLeft':
                     if (player.x - player.speed >= 0) {
@@ -94,8 +100,9 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 			ctx.fillRect(0, 0, canvasWidth, canvasHeight)
 
 			// Draw the current player
-			ctx.fillStyle = 'red'
-            ctx.fillRect(player.x - cameraX, player.y - cameraY, 20, 20)
+			//ctx.fillStyle = 'red'
+            ctx.drawImage(myPlayerImage, player.x - cameraX, player.y - cameraY, 20, 20)
+            //ctx.fillRect(player.x - cameraX, player.y - cameraY, 20, 20)
             // Vérifier si le joueur a atteint un trésor
             gameData.treasures.forEach((treasure, index) => {
                 const posX = treasure.posX;
@@ -108,16 +115,13 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
                 }
             });
 
-
-
-            // ...
-
             // Dessinez les trésors restants
-            ctx.fillStyle = 'gold';
+            //ctx.fillStyle = 'gold';
             gameData.treasures.forEach((treasure) => {
                 const posX = treasure.posX;
                 const posY = treasure.posY;
-                ctx.fillRect(posX - cameraX, posY - cameraY, 20, 20);
+                ctx.drawImage(treasureImage, posX - cameraX, posY - cameraY, 20, 20)
+                //ctx.fillRect(posX - cameraX, posY - cameraY, 20, 20);
             });
 			ctx.fillRect(player.x, player.y, 20, 20)
 
