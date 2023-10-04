@@ -116,6 +116,8 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
                 const posY = parseInt(treasure.posY);
                 ctx.fillRect(posX - cameraX, posY - cameraY, 20, 20);
             });
+			ctx.fillRect(player.x, player.y, 20, 20)
+
 			// Draw other players
 			ctx.fillStyle = 'blue'
 			otherPlayers.forEach((p) => {
