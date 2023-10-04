@@ -1,14 +1,20 @@
-// components/Game.js
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { GameProps } from '@/models/props/game.props'
+import { io } from 'socket.io-client'
+import * as process from 'process'
+import { Player } from '@/models/interfaces/player.interface'
 
 const Game: React.FC<GameProps> = ({ gameData }) => {
-	const canvasRef = useRef<HTMLCanvasElement | null>(null)
-	const player = {
-		x: 50,
-		y: 50,
+	const [player, setPlayer] = useState({
+		x: 40,
+		y: 40,
 		speed: 5,
-	}
+	})
+
+	const [otherPlayers, setOtherPlayers] = useState<Player[]>([])
+
+	const canvasRef = useRef<HTMLCanvasElement | null>(null)
+	const socketRef = useRef<any>(null)
 
 	useEffect(() => {
 		const canvas = canvasRef.current
@@ -23,6 +29,13 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 			console.error('Unable to get 2D context from canvas')
 			return
 		}
+
+		// Create the WebSocket connection only once
+		if (!socketRef.current) {
+			socketRef.current = io(`ws://${process.env.NEXT_PUBLIC_BACK_URL}`)
+		}
+
+		const socket = socketRef.current
 
 		const handleKeyDown = (e: KeyboardEvent) => {
 			switch (e.key) {
@@ -41,11 +54,22 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 				default:
 					break
 			}
+			socket.emit('playerMove', { x: player.x, y: player.y })
 		}
 
 		window.addEventListener('keydown', handleKeyDown)
 
+		socket.on('playerPosition', (data: any) => {
+			// Handle updates to other player positions
+			setOtherPlayers((prevPlayers) => {
+				const updatedPlayers = prevPlayers.filter((p) => p.id !== data.id)
+				return [...updatedPlayers, data]
+			})
+		})
+
 		const gameLoop = () => {
+			console.log(otherPlayers)
+
 			// Clear the canvas
 			ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -53,9 +77,15 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 			ctx.fillStyle = gameData.mapBackground || 'blue'
 			ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-			// Draw the player
+			// Draw the current player
 			ctx.fillStyle = 'red'
 			ctx.fillRect(player.x, player.y, 20, 20)
+
+			// Draw other players
+			ctx.fillStyle = 'blue'
+			otherPlayers.forEach((p) => {
+				ctx.fillRect(p.x, p.y, 20, 20)
+			})
 
 			// Draw treasures
 			ctx.fillStyle = 'gold'
@@ -69,12 +99,16 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 			requestAnimationFrame(gameLoop)
 		}
 
+		socket.on('playersList', (players: any) => {
+			setOtherPlayers(players)
+		})
+
 		gameLoop()
 
 		return () => {
 			window.removeEventListener('keydown', handleKeyDown)
 		}
-	}, [gameData])
+	}, [gameData, player, otherPlayers])
 
 	return (
 		<div>
