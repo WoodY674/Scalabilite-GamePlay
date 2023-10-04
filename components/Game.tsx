@@ -71,14 +71,26 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 			// Draw the player
 			ctx.fillStyle = 'red'
             ctx.fillRect(player.x - cameraX, player.y - cameraY, 20, 20)
+            // Vérifier si le joueur a atteint un trésor
+            gameData.treasures.forEach((treasure, index) => {
+                const posX = parseInt(treasure.posX);
+                const posY = parseInt(treasure.posY);
 
-			// Draw treasures
-			ctx.fillStyle = 'gold'
-			gameData.treasures.forEach((treasure) => {
-				const posX = parseInt(treasure.posX)
-				const posY = parseInt(treasure.posY)
-                ctx.fillRect(posX - cameraX, posY - cameraY, 20, 20)
-			})
+                if (player.x == posX && player.y && posY) {
+                    // Le joueur a atteint un trésor, alors retirez-le du tableau
+                    gameData.treasures.splice(index, 1);
+                }
+            });
+
+            // ...
+
+            // Dessinez les trésors restants
+            ctx.fillStyle = 'gold';
+            gameData.treasures.forEach((treasure) => {
+                const posX = parseInt(treasure.posX);
+                const posY = parseInt(treasure.posY);
+                ctx.fillRect(posX - cameraX, posY - cameraY, 20, 20);
+            });
 
 			// Request animation frame
 			requestAnimationFrame(gameLoop)
