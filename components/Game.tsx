@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { GameProps } from '@/models/props/game.props'
-import { io } from 'socket.io-client'
-import * as process from 'process'
 import { Player } from '@/models/interfaces/player.interface'
+import { io } from 'socket.io-client'
 
 const Game: React.FC<GameProps> = ({ gameData }) => {
 	const [player, setPlayer] = useState({
@@ -14,6 +13,7 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 	const [otherPlayers, setOtherPlayers] = useState<Player[]>([])
 
 	const canvasRef = useRef<HTMLCanvasElement | null>(null)
+
 	const socketRef = useRef<any>(null)
 
 	useEffect(() => {
@@ -54,11 +54,14 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 				default:
 					break
 			}
-			socket.emit('playerMove', { x: player.x, y: player.y })
+			console.log(gameData.treasures)
+
+			socket.emit('move', { axisX: player.x, axisY: player.y })
 		}
 
 		window.addEventListener('keydown', handleKeyDown)
 
+		/*
 		socket.on('playerPosition', (data: any) => {
 			// Handle updates to other player positions
 			setOtherPlayers((prevPlayers) => {
@@ -66,10 +69,9 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 				return [...updatedPlayers, data]
 			})
 		})
+*/
 
 		const gameLoop = () => {
-			console.log(otherPlayers)
-
 			// Clear the canvas
 			ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -99,9 +101,9 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 			requestAnimationFrame(gameLoop)
 		}
 
-		socket.on('playersList', (players: any) => {
+		/*		socket.on('playersList', (players: any) => {
 			setOtherPlayers(players)
-		})
+		})*/
 
 		gameLoop()
 
