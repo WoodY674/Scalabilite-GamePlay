@@ -27,16 +27,24 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			switch (e.key) {
 				case 'ArrowLeft':
-					player.x -= player.speed
+                    if (player.x - player.speed >= 0) {
+                        player.x -= player.speed;
+                    }
 					break
 				case 'ArrowRight':
-					player.x += player.speed
+                    if (player.x + player.speed + 20 <= canvasWidth) {
+                        player.x += player.speed;
+                    }
 					break
 				case 'ArrowUp':
-					player.y -= player.speed
+                    if (player.y - player.speed >= 0) {
+                        player.y -= player.speed;
+                    }
 					break
 				case 'ArrowDown':
-					player.y += player.speed
+                    if (player.y + player.speed + 20 <= canvasHeight) {
+                        player.y += player.speed;
+                    }
 					break
 				default:
 					break
