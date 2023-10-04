@@ -5,8 +5,8 @@ import Game from '@/components/Game'
 const Home: NextPage = () => {
 	const gameData = {
 		mapBackground: '#00FFFF',
-		width: '800',
-		height: '800',
+		width: '1400',
+		height: '600',
 		treasures: [
 			{
 				posX: '100',

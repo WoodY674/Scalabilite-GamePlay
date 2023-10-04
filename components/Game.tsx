@@ -40,16 +40,24 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			switch (e.key) {
 				case 'ArrowLeft':
-					player.x -= player.speed
+                    if (player.x - player.speed >= 0) {
+                        player.x -= player.speed;
+                    }
 					break
 				case 'ArrowRight':
-					player.x += player.speed
+                    if (player.x + player.speed + 20 <= canvasWidth) {
+                        player.x += player.speed;
+                    }
 					break
 				case 'ArrowUp':
-					player.y -= player.speed
+                    if (player.y - player.speed >= 0) {
+                        player.y -= player.speed;
+                    }
 					break
 				case 'ArrowDown':
-					player.y += player.speed
+                    if (player.y + player.speed + 20 <= canvasHeight) {
+                        player.y += player.speed;
+                    }
 					break
 				default:
 					break
@@ -61,6 +69,8 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 
 		window.addEventListener('keydown', handleKeyDown)
 
+        const canvasWidth = canvas.width
+        const canvasHeight = canvas.height
 		/*
 		socket.on('playerPosition', (data: any) => {
 			// Handle updates to other player positions
@@ -72,29 +82,46 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 */
 
 		const gameLoop = () => {
+            // Calculate the camera position to center the player
+            const cameraX = player.x - canvasWidth / 2
+            const cameraY = player.y - canvasHeight / 2
+
 			// Clear the canvas
-			ctx.clearRect(0, 0, canvas.width, canvas.height)
+			ctx.clearRect(0, 0, canvasWidth, canvasHeight)
 
 			// Set background color from gameData
 			ctx.fillStyle = gameData.mapBackground || 'blue'
-			ctx.fillRect(0, 0, canvas.width, canvas.height)
+			ctx.fillRect(0, 0, canvasWidth, canvasHeight)
 
 			// Draw the current player
 			ctx.fillStyle = 'red'
+            ctx.fillRect(player.x - cameraX, player.y - cameraY, 20, 20)
+            // Vérifier si le joueur a atteint un trésor
+            gameData.treasures.forEach((treasure, index) => {
+                const posX = parseInt(treasure.posX);
+                const posY = parseInt(treasure.posY);
+
+                if (player.x == posX && player.y && posY) {
+                    // Le joueur a atteint un trésor, alors retirez-le du tableau
+                    gameData.treasures.splice(index, 1);
+                }
+            });
+
+            // ...
+
+            // Dessinez les trésors restants
+            ctx.fillStyle = 'gold';
+            gameData.treasures.forEach((treasure) => {
+                const posX = parseInt(treasure.posX);
+                const posY = parseInt(treasure.posY);
+                ctx.fillRect(posX - cameraX, posY - cameraY, 20, 20);
+            });
 			ctx.fillRect(player.x, player.y, 20, 20)
 
 			// Draw other players
 			ctx.fillStyle = 'blue'
 			otherPlayers.forEach((p) => {
 				ctx.fillRect(p.x, p.y, 20, 20)
-			})
-
-			// Draw treasures
-			ctx.fillStyle = 'gold'
-			gameData.treasures.forEach((treasure) => {
-				const posX = parseInt(treasure.posX)
-				const posY = parseInt(treasure.posY)
-				ctx.fillRect(posX, posY, 20, 20)
 			})
 
 			// Request animation frame
