@@ -64,7 +64,7 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 			}
 			console.log(gameData.treasures)
 
-			socket.emit('move', { axisX: player.x, axisY: player.y })
+			socket.emit('move', { id: 1, posX: player.x, posY: player.y })
 		}
 
 		window.addEventListener('keydown', handleKeyDown)
@@ -141,6 +141,8 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 			window.removeEventListener('keydown', handleKeyDown)
 		}
 	}, [gameData, player, otherPlayers])
+
+
 
 	return (
 		<div>

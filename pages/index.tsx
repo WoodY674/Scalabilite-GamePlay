@@ -1,8 +1,17 @@
 import type { NextPage } from 'next'
 import React from 'react'
 import Game from '@/components/Game'
+import axios from "axios";
 
 const Home: NextPage = () => {
+
+    axios.post("http://localhost:3001/session/launch", {
+        "avatar": "",
+        "userId": 1
+    }).then(function (response) {
+        console.log(response);
+    })
+
 	const gameData = {
 		mapBackground: '#00FFFF',
 		width: '1400',

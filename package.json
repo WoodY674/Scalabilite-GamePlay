@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/WoodY674/Scalabilite-GamePlay#readme",
   "dependencies": {
+    "axios": "^1.5.1",
     "next": "12.3.0",
     "phaser": "^3.60.0",
     "react": "^18.2.0",
