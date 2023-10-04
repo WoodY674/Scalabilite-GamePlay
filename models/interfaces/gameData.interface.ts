@@ -7,4 +7,5 @@ export interface GameData {
 	height: number
 	treasures: Treasure[],
     players: Player[]
+    currentPlayer: Player
 }

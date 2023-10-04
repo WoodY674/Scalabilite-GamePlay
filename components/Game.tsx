@@ -5,12 +5,12 @@ import { io } from 'socket.io-client'
 
 const Game: React.FC<GameProps> = ({ gameData }) => {
 	const [player, setPlayer] = useState({
-		x: 40,
-		y: 40,
+		x: gameData.currentPlayer.posX,
+		y: gameData.currentPlayer.posY,
 		speed: 5,
 	})
 
-	const [otherPlayers, setOtherPlayers] = useState<Player[]>([])
+	const [otherPlayers, setOtherPlayers] = useState<Player[]>(gameData.players)
 
 	const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
@@ -122,7 +122,7 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 			ctx.fillRect(player.x, player.y, 20, 20)
 
 			// Draw other players
-			ctx.fillStyle = 'blue'
+			ctx.fillStyle = 'green'
 			otherPlayers.forEach((p) => {
 				ctx.fillRect(p.posX, p.posY, 20, 20)
 			})
