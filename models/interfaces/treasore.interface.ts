@@ -1,5 +1,7 @@
 export interface Treasure {
     id: number
-	posX: string
-	posY: string
+	posX: number
+	posY: number
+    img: string
+    value: number
 }

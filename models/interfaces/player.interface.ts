@@ -1,5 +1,7 @@
 export interface Player {
-	id: string
-	x: number
-	y: number
+	id: number
+    userId:number
+	posX: number
+	posY: number
+    avatar: string
 }

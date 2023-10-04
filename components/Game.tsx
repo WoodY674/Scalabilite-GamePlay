@@ -98,8 +98,8 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
             ctx.fillRect(player.x - cameraX, player.y - cameraY, 20, 20)
             // Vérifier si le joueur a atteint un trésor
             gameData.treasures.forEach((treasure, index) => {
-                const posX = parseInt(treasure.posX);
-                const posY = parseInt(treasure.posY);
+                const posX = treasure.posX;
+                const posY = treasure.posY;
 
                 if (player.x == posX && player.y == posY) {
                     // Le joueur a atteint un trésor, alors retirez-le du tableau
@@ -115,8 +115,8 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
             // Dessinez les trésors restants
             ctx.fillStyle = 'gold';
             gameData.treasures.forEach((treasure) => {
-                const posX = parseInt(treasure.posX);
-                const posY = parseInt(treasure.posY);
+                const posX = treasure.posX;
+                const posY = treasure.posY;
                 ctx.fillRect(posX - cameraX, posY - cameraY, 20, 20);
             });
 			ctx.fillRect(player.x, player.y, 20, 20)
@@ -124,7 +124,7 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 			// Draw other players
 			ctx.fillStyle = 'blue'
 			otherPlayers.forEach((p) => {
-				ctx.fillRect(p.x, p.y, 20, 20)
+				ctx.fillRect(p.posX, p.posY, 20, 20)
 			})
 
 			// Request animation frame
@@ -148,8 +148,8 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 		<div>
 			<canvas
 				ref={canvasRef}
-				width={parseInt(gameData.width) || 800}
-				height={parseInt(gameData.height) || 800}
+				width={gameData.width || 800}
+				height={gameData.height || 800}
 			/>
 		</div>
 	)

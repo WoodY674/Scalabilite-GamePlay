@@ -1,8 +1,10 @@
 import { Treasure } from '@/models/interfaces/treasore.interface'
+import { Player } from '@/models/interfaces/player.interface';
 
 export interface GameData {
 	mapBackground: string
-	width: string
-	height: string
-	treasures: Treasure[]
+	width: number
+	height: number
+	treasures: Treasure[],
+    players: Player[]
 }
