@@ -1,8 +1,10 @@
 // components/Game.js
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 import { GameProps } from '@/models/props/game.props'
 
 const Game: React.FC<GameProps> = ({ gameData }) => {
+    const [score, setScore] = useState(0); // Variable d'état pour le score du joueur
+    const [playerId, setPlayerId] = useState(''); // Variable d'état pour l'ID du joueur
 	const canvasRef = useRef<HTMLCanvasElement | null>(null)
 	const player = {
 		x: 50,
@@ -10,7 +12,7 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 		speed: 5,
 	}
 
-	useEffect(() => {
+    useEffect(() => {
 		const canvas = canvasRef.current
 
 		if (!canvas) {
@@ -45,6 +47,21 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 
 		window.addEventListener('keydown', handleKeyDown)
 
+
+
+        // Configuration du WebSocket + écoute des mises à jour du score
+        const socket = new WebSocket('URL_DU_SOCKET'); // Remplacez par l'URL réelle de votre WebSocket
+
+        socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === 'scoreUpdate') {
+            setScore(data.score); // Mettez à jour le score lorsque vous recevez une mise à jour du score du joueur actuel
+        } else if (data.type === 'playerIdUpdate') {
+            setPlayerId(data.playerId); // Mettez à jour l'ID du joueur lorsque vous recevez une mise à jour de l'ID
+        }
+    };
+
+
 		const gameLoop = () => {
 			// Clear the canvas
 			ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -67,23 +84,28 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 
 			// Request animation frame
 			requestAnimationFrame(gameLoop)
-		}
+		};
 
-		gameLoop()
+		gameLoop();
 
-		return () => {
-			window.removeEventListener('keydown', handleKeyDown)
-		}
-	}, [gameData])
+		return ()=> {
+            window.removeEventListener('keydown', handleKeyDown);
+            socket.close(); // Fermeture de la connexion WebSocket
+        };
 
-	return (
+	}, [gameData]);
+
+    return (
 		<div>
-			<canvas
+            <div>ID du joueur: {playerId}</div>
+            <div>Score: {score}</div>
+            <canvas
 				ref={canvasRef}
 				width={parseInt(gameData.width) || 800}
 				height={parseInt(gameData.height) || 800}
 			/>
 		</div>
+
 	)
 }
 
