@@ -104,6 +104,7 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
                 if (player.x == posX && player.y && posY) {
                     // Le joueur a atteint un trésor, alors retirez-le du tableau
                     gameData.treasures.splice(index, 1);
+                    socket.emit('claim', gameData.treasures[index].id)
                 }
             });
 
