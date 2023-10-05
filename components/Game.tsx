@@ -99,7 +99,7 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
             // check user is on a treasure
             treasures.forEach((treasure, index) => {
                 if (isPlayerOverTreasure(player, treasure)) {
-                    socket.emit('claim', {treasureId:treasure.id, userid:player.userid})
+                    socket.emit('claim', {treasureId:treasure.id, userid:player.userid, sessionId:gameData.sessionId})
                     treasures.splice(index, 1);
                 }
             });
@@ -129,7 +129,13 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 		}
 
         //region socket
-		socket.on('moveConfirmed', (movingPlayer: Player) => {
+		socket.on(`newPlayer/${gameData.sessionId}`, (newPlayer: Player) => {
+            console.log("a new player is comming")
+            if(player.userid != newPlayer.userid) {
+                setOtherPlayers([...otherPlayers, newPlayer])
+            }
+		})
+		socket.on(`moveConfirmed/${gameData.sessionId}`, (movingPlayer: Player) => {
             if(player.userid != movingPlayer.userid) {
                 for (let i = 0; i < otherPlayers.length; i++) {
                     if (movingPlayer.id == otherPlayers[i].id) {
@@ -141,7 +147,7 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
                 }
             }
 		})
-        socket.on('treasureClaimed', (treasureId: number) => {
+        socket.on(`treasureClaimed/${gameData.sessionId}`, (treasureId: number) => {
             for (let i = 0; i < treasures.length; i++) {
                 if (treasureId == treasures[i].id) {
                     const newList = [...treasures]
@@ -151,13 +157,11 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
                 }
             }
 		})
-        socket.on('endGame', () => {
+        socket.on(`endGame/${gameData.sessionId}`, () => {
             //@TODO : redirect to dashboard page (auth service)
 		})
-        socket.on('score', (data: ScoreOnUpdate) => {
-            if(data.userid == player.userid){
-                setScore(data.score)
-            }
+        socket.on(`score/${player.userid}`, (data: ScoreOnUpdate) => {
+            setScore(data.score)
 		})
         //endregion
 

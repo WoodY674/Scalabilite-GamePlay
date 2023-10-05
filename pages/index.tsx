@@ -26,6 +26,7 @@ const Home: React.FC = () => {
                         mapBackground: response.data.map.backgroundImg,
                         width: response.data.map.width,
                         height: response.data.map.height,
+                        sessionId: response.data.map.id,
                         treasures: response.data.treasures,
                         players: response.data.players,
                         currentPlayer: response.data.currentPlayer,
