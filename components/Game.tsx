@@ -3,7 +3,7 @@ import { GameProps } from '@/models/props/game.props'
 import { Player, PlayerInGame } from '@/models/interfaces/player.interface'
 import { io } from 'socket.io-client'
 import {canvasData, getNotEmpty, isPlayerOverTreasure} from "../src/helpers/canva";
-import {Treasure} from "@/models/interfaces/treasore.interface";
+import {ScoreOnUpdate, Treasure} from "@/models/interfaces/treasore.interface";
 
 
 const Game: React.FC<GameProps> = ({ gameData }) => {
@@ -17,7 +17,9 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 
 	const [otherPlayers, setOtherPlayers] = useState<Player[]>(gameData.players)
 	const [treasures, setTreasures] = useState<Treasure[]>(gameData.treasures)
-	const canvasRef = useRef<HTMLCanvasElement | null>(null)
+    const [score, setScore] = useState(0)
+
+    const canvasRef = useRef<HTMLCanvasElement | null>(null)
 	const socketRef = useRef<any>(null)
 
     const myPlayerImage = new Image();
@@ -147,11 +149,15 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
                     setTreasures(newList)
                     break
                 }
-
             }
 		})
         socket.on('endGame', () => {
             //@TODO : redirect to dashboard page (auth service)
+		})
+        socket.on('score', (data: ScoreOnUpdate) => {
+            if(data.userid == player.userid){
+                setScore(data.score)
+            }
 		})
         //endregion
 
@@ -163,14 +169,22 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 	}, [gameData, player, otherPlayers, treasures])
 
 
-
 	return (
 		<div>
-			<canvas
-				ref={canvasRef}
-				width={gameData.width || 800}
-				height={gameData.height || 800}
-			/>
+            <div>Score : {score}</div>
+            <div style={{border:"3px black solid",
+                width:"400px", height:"400px",
+                display:"flex",
+                justifyContent:"center",
+                alignItems:"center",
+                overflow:"hidden",
+                background:"url(https://img.freepik.com/premium-vector/cartoon-wood-floor-tiles-pattern_172107-1063.jpg)"}}>
+                <canvas
+                    ref={canvasRef}
+                    width={gameData.width || 800}
+                    height={gameData.height || 800}
+                />
+            </div>
 		</div>
 	)
 }
