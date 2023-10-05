@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: scalabiliteGameplayFront
+spec:
+  selector:
+    app: scalabiliteGameplayFront
+  ports:
+      - protocol: TCP
+        port: 4200
+        targetPort: 3000
+  type: LoadBalancer

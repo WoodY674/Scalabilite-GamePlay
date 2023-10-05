@@ -1,8 +1,4 @@
 name: 💫 Vercel Production Deployment
-#on:
-#  push:
-#    branches:
-#      - cicd
 
 on:
   pull_request:
@@ -12,6 +8,10 @@ on:
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  DOCKER_IMAGE_NAME: your-docker-image-name
+  DOCKER_IMAGE_TAG: latest
 
 jobs:
   Tests:
@@ -34,17 +34,19 @@ jobs:
       - name: 🛟 Run Tests
         run: npm run test:ci
 
-  Deploy-Production:
-    name: 🚀 Deploy to Vercel
-    needs: [ Tests ]
+  Push-Docker-Image:
+    name: 🐳 Push Docker Image to Docker Hub
+    needs: [Deploy-Production]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
-      - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Build Project Artifacts
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      - name: Build Docker Image
+        run: docker build -t ${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG }} .
+
+      - name: Push Docker Image to Docker Hub
+        run: docker push ${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG }}
