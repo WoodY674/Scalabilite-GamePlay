@@ -7,6 +7,7 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 	const [player, setPlayer] = useState({
 		x: gameData.currentPlayer.posX,
 		y: gameData.currentPlayer.posY,
+        id: gameData.currentPlayer.userid,
 		speed: 5,
 	})
 
@@ -70,7 +71,7 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 			}
 			console.log(gameData.treasures)
 
-			socket.emit('move', { id: 1, posX: player.x, posY: player.y })
+			socket.emit('move', { id: player.id, posX: player.x, posY: player.y })
 		}
 
 		window.addEventListener('keydown', handleKeyDown)
