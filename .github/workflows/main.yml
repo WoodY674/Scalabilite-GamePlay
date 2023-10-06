@@ -87,7 +87,12 @@ jobs:
         with:
           kubeconfig: ${{ secrets.KUBECONFIG }} | base64 --decode
 
-      - name: Deploy to Kubernetes Cluster
+      - name: Set up Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: 'v3'
+
+      - name: Deploy Helm Chart
         run: |
-          kubectl apply -f your-deployment-manifest.yaml
-          kubectl rollout status deployment/your-deployment-name -n your-namespace-name
+          helm upgrade gameplay ./helm
+
