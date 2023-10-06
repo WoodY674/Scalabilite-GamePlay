@@ -5,3 +5,12 @@ export interface Player {
 	posY: number
     avatar: string
 }
+
+export interface PlayerInGame{
+    x: number
+    y: number
+    userid: number
+    speed: number
+    avatar: string
+    userMail: string
+}

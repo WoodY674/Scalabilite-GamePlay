@@ -5,3 +5,8 @@ export interface Treasure {
     img: string
     value: number
 }
+
+export interface ScoreOnUpdate{
+    score: number
+    userid: number
+}

@@ -5,7 +5,9 @@ export interface GameData {
 	mapBackground: string
 	width: number
 	height: number
-	treasures: Treasure[],
+    sessionId: number
+    userMail: string
+	treasures: Treasure[]
     players: Player[]
     currentPlayer: Player
 }

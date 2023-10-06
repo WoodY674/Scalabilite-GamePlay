@@ -5,7 +5,8 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 4200",
+    "dev2": "next dev -p 4201",
     "build": "next build",
     "start": "next start -p 4200",
     "lint": "next lint",
@@ -30,6 +31,7 @@
     "axios": "^1.5.1",
     "next": "12.3.0",
     "phaser": "^3.60.0",
+    "prom-client": "^14.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "socket.io-client": "^4.7.2"
