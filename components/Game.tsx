@@ -2,41 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { GameProps } from '@/models/props/game.props'
 import { Player, PlayerInGame } from '@/models/interfaces/player.interface'
 import { io } from 'socket.io-client'
-import {canvasData, getNotEmpty, isPlayerOverTreasure} from "../src/helpers/canva";
+import {canvasData, GamesImage, ImageCanva, isPlayerOverTreasure} from "../src/helpers/canva";
 import {ScoreOnUpdate, Treasure} from "@/models/interfaces/treasore.interface";
 
-async function checkImage(url:string){
-    const res = await fetch(url);
-    const buff = await res.blob();
-    return buff.type.startsWith('image/')
-}
-
-class ImageCanva{
-    defaultImg: string
-    img: HTMLImageElement
-
-    constructor(src:string, defaultImg: string) {
-        this.defaultImg = defaultImg
-        this.img = new Image()
-
-        try {
-            checkImage(this.img.src).then((res)=>{
-                this.img.src =res ? src : this.defaultImg
-            })
-        }catch (e){
-            console.log("src error", e)
-        }
-    }
-
-    draw(canvasCtx: CanvasRenderingContext2D, dx: number, dy: number, dw: number, dh: number){
-        canvasCtx.drawImage(this.img, dx, dy, dw, dh)
-    }
-}
-
-interface GamesImage{
-    treasures: {[name:string]: ImageCanva}
-    otherPlayer: {[name:string]: ImageCanva}
-}
 const Game: React.FC<GameProps> = ({ gameData }) => {
 	const [player, setPlayer] = useState<PlayerInGame>({
 		x: gameData.currentPlayer.posX,
@@ -112,6 +80,7 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 
         const canvasWidth = canvas.width
         const canvasHeight = canvas.height
+
         treasures.forEach((treasure) => {
             images.treasures[treasure.id.toString()] = new ImageCanva(treasure.img, 'https://cdn-icons-png.flaticon.com/512/4230/4230569.png')
         });
