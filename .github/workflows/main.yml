@@ -86,5 +86,5 @@ jobs:
         uses: WyriHaximus/github-action-helm3@v3
         with:
           exec: helm upgrade gameplay ./helm --install --wait --atomic --namespace=gameplay --values=./helm/values.yaml
-          kubeconfig: ${{ secrets.KUBECONFIG }}
+          kubeconfig: ${{ secrets.KUBECONFIG }} | base64 --decode
 
