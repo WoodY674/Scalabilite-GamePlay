@@ -13,7 +13,7 @@ spec:
         app: gameplay
     spec:
       containers:
-          - name: gameplay-nextjs-container
+          - name: gameplay
             image: anthlr/scalabilite-gameplay-front:latest
             ports:
                 - containerPort: 3000
