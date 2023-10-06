@@ -82,9 +82,16 @@ jobs:
       - name: Pull Test Docker Image
         run: docker pull ${{ env.DOCKER_IMAGE_NAME_LATEST }}
 
-      - name: Helm job
+      - name: Helm job dev
         uses: WyriHaximus/github-action-helm3@v3
         with:
           exec: helm upgrade gameplay ./helm --install --wait --atomic --namespace=game-team --values=./helm/values.yaml
           kubeconfig: ${{ secrets.KUBECONFIG }}
+
+      - name: Helm job integration
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm upgrade gameplay ./helm --install --wait --atomic --namespace=integration --values=./helm/values.yaml
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+
 
