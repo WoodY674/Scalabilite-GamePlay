@@ -85,7 +85,7 @@ jobs:
       - name: Configure kubectl
         uses: azure/k8s-set-context@v1
         with:
-          kubeconfig: ${{ secrets.KUBECONFIG }}
+          kubeconfig: ${{ secrets.KUBECONFIG }} | base64 --decode
 
       - name: Deploy to Kubernetes Cluster
         run: |
