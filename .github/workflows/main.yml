@@ -70,7 +70,7 @@ jobs:
 
   Deploy-to-Kubernetes:
     name: 🚀 Deploy to Kubernetes
-    needs: [Build-Test-Image]
+    needs: [Push-Docker-Image]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
