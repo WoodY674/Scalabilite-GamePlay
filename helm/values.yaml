@@ -97,6 +97,7 @@ tolerations: []
 
 affinity: {}
 
-configMapData:
-  NEXT_PUBLIC_BACK_URL: gameplay-api
+envLocalConfigMap:
+  name: env-local
+  key: .env
 
