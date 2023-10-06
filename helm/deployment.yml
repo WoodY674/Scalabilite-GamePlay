@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scalabiliteGameplayFront
+  name: gameplay
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: scalabiliteGameplayFront
+      app: gameplay
   template:
     metadata:
       labels:
-        app: scalabiliteGameplayFront
+        app: gameplay
     spec:
       containers:
-          - name: scalabiliteGameplayFront-nextjs-container
-            image: msagres/scalabilite-gameplay-front:latest
+          - name: gameplay-nextjs-container
+            image: anthlr/scalabilite-gameplay-front:latest
             ports:
                 - containerPort: 3000
             volumeMounts:
