@@ -35,6 +35,12 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          env:
+            - name: BACK_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-configmap
+                  key: NEXT_PUBLIC_BACK_URL
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
