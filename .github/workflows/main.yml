@@ -85,6 +85,6 @@ jobs:
       - name: Helm job
         uses: WyriHaximus/github-action-helm3@v3
         with:
-          exec: helm upgrade gameplay ./helm --install --wait --atomic --namespace=gameplay --values=./helm/values.yaml
+          exec: helm upgrade gameplay ./helm --install --wait --atomic --namespace=game-team --values=./helm/values.yaml
           kubeconfig: ${{ secrets.KUBECONFIG }}
 
