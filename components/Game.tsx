@@ -12,6 +12,7 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 		y: gameData.currentPlayer.posY,
         userid: gameData.currentPlayer.userid,
         avatar: getNotEmpty(gameData.currentPlayer.avatar, 'https://upload.wikimedia.org/wikipedia/en/9/9d/Slime_%28Dragon_Quest%29.png'),
+        userMail: gameData.userMail,
 		speed: 5,
 	})
 
@@ -99,7 +100,7 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
             // check user is on a treasure
             treasures.forEach((treasure, index) => {
                 if (isPlayerOverTreasure(player, treasure)) {
-                    socket.emit('claim', {treasureId:treasure.id, userid:player.userid, sessionId:gameData.sessionId})
+                    socket.emit('claim', {treasureId:treasure.id, userid:player.userid, sessionId:gameData.sessionId, userMail:player.userMail})
                     treasures.splice(index, 1);
                 }
             });
@@ -130,8 +131,12 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 
         //region socket
 		socket.on(`newPlayer/${gameData.sessionId}`, (newPlayer: Player) => {
-            console.log("a new player is comming")
             if(player.userid != newPlayer.userid) {
+                for (let i = 0; i < otherPlayers.length; i++) {
+                    if (newPlayer.id == otherPlayers[i].id) {
+                        return
+                    }
+                }
                 setOtherPlayers([...otherPlayers, newPlayer])
             }
 		})
@@ -159,6 +164,7 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 		})
         socket.on(`endGame/${gameData.sessionId}`, () => {
             //@TODO : redirect to dashboard page (auth service)
+            window.location.href = `http://${(process.env.SERVICE_AUTH ?? "localhost:4200")}/`
 		})
         socket.on(`score/${player.userid}`, (data: ScoreOnUpdate) => {
             setScore(data.score)

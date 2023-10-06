@@ -6,6 +6,7 @@ export interface GameData {
 	width: number
 	height: number
     sessionId: number
+    userMail: string
 	treasures: Treasure[]
     players: Player[]
     currentPlayer: Player

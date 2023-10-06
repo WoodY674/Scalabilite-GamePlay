@@ -12,4 +12,5 @@ export interface PlayerInGame{
     userid: number
     speed: number
     avatar: string
+    userMail: string
 }

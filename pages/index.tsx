@@ -13,13 +13,20 @@ const Home: React.FC = () => {
 
     const [gameData, setGameData] = useState<GameData|null>(null)
 
-    //@TODO : get user id from token, to set 'userId' in api call
+    //@TODO : get user id from token, to set 'userId' in api call and userMail
     useEffect(() => {
         execOnlyOnce(() => {
             if(gameData == null) {
+                const userMail = ""
+                let userId
+                try {
+                    userId = parseInt(window.location.search.replace(/&?/, "").split("=")[1])
+                }catch (e){
+                    userId = getRndInteger(1,2)
+                }
                 axios.post(`http://${process.env.NEXT_PUBLIC_BACK_URL}/session/launch`, {
                     "avatar": "",
-                    "userId": getRndInteger(1, 2)
+                    "userId": userId
                 }).then(function (response: any) {
                     console.log(response.data);
                     setGameData({
@@ -27,6 +34,7 @@ const Home: React.FC = () => {
                         width: response.data.map.width,
                         height: response.data.map.height,
                         sessionId: response.data.map.id,
+                        userMail: userMail,
                         treasures: response.data.treasures,
                         players: response.data.players,
                         currentPlayer: response.data.currentPlayer,
