@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  {{- range $key, $value := .Values.configMapData }}
+  {{ $key }}: {{ quote $value | nindent 4 }}
+  {{- end }}
