@@ -1,6 +1,6 @@
 export interface Player {
 	id: number
-    userid:number
+    userid: string
 	posX: number
 	posY: number
     avatar: string
@@ -9,7 +9,7 @@ export interface Player {
 export interface PlayerInGame{
     x: number
     y: number
-    userid: number
+    userid: string
     speed: number
     avatar: string
     userMail: string
