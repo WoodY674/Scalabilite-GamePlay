@@ -9,7 +9,8 @@
     "build": "next build",
     "start": "next start -p 4200",
     "lint": "next lint",
-    "test": "jest --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "test:ci": "jest --ci",
     "docker-clear": "docker image prune -f --all && docker compose down -v && docker-compose build --no-cache && docker compose up",
     "docker": "docker-compose build --no-cache && docker compose up"
