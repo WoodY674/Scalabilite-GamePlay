@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-configmap
+  name: env-local
 data:
-  {{- range $key, $value := .Values.configMapData }}
-  {{ $key }}: {{ quote $value | nindent 4 }}
-  {{- end }}
+  .env: |-
+    NEXT_PUBLIC_BACK_URL=gameplay-api
+
