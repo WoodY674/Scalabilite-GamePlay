@@ -4,4 +4,4 @@ metadata:
   name: env-local
 data:
   .env: |-
-    NEXT_PUBLIC_BACK_URL=gameplay-api
+    NEXT_PUBLIC_BACK_URL=leaddev.digitalseed.com/gameplay/api
