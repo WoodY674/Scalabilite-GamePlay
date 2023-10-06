@@ -3,6 +3,7 @@ import Game from '@/components/Game'
 import axios from "axios";
 import {GameData} from "@/models/interfaces/gameData.interface";
 import {useEffectFix} from "../src/helpers/useEffectUtils";
+import {getQueryParams} from "../src/helpers/query";
 
 function getRndInteger(min:number, max:number) {
     return Math.floor(Math.random() * (max+1 - min) ) + min;
@@ -17,10 +18,12 @@ const Home: React.FC = () => {
     useEffect(() => {
         execOnlyOnce(() => {
             if(gameData == null) {
-                const userMail = ""
-                let userId
+                let userMail: string
+                let userId : number
                 try {
-                    userId = parseInt(window.location.search.replace(/&?/, "").split("=")[1])
+                    const params = getQueryParams(window.location.search)
+                    userId = parseInt(params.get("userId"))
+                    userMail = params.get("mail")
                 }catch (e){
                     userId = getRndInteger(1,2)
                 }
