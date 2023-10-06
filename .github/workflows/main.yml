@@ -82,28 +82,9 @@ jobs:
       - name: Pull Test Docker Image
         run: docker pull ${{ env.DOCKER_IMAGE_NAME_LATEST }}
 
-#      - name: Configure kubectl
-#        uses: azure/k8s-set-context@v1
-#        with:
-#          kubeconfig: ${{ secrets.KUBECONFIG }} | base64 --decode
-#
-#      - name: Set up Helm
-#        uses: azure/setup-helm@v1
-#        with:
-#          version: 'v3'
-#
-#      - name: Deploy Helm Chart
-#        run: |
-#          helm upgrade gameplay ./helm
       - name: Helm job
-        uses: deliverybot/helm@v1
+        uses: WyriHaximus/github-action-helm3@v3
         with:
-          release: gameplay
-          namespace: gameplay
-          chart: app./helm
-          values: |
-            name: gameplay
-          value-files: values.yaml,
-        env:
-          KUBECONFIG_FILE: ${{ secrets.KUBECONFIG }}
+          exec: helm upgrade gameplay ./helm --install --wait --atomic --namespace=gameplay --values=./helm/values.yaml
+          kubeconfig: ${{ secrets.KUBECONFIG }}
 
