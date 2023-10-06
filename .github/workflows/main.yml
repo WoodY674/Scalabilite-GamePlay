@@ -89,5 +89,5 @@ jobs:
 
       - name: Deploy to Kubernetes Cluster
         run: |
-          kubectl apply -f your-deployment-manifest.yaml
-          kubectl rollout status deployment/your-deployment-name -n your-namespace-name
+          kubectl apply -f ./helm/deployment.yaml
+          kubectl rollout status deployment/deployment -n gameplay
