@@ -3,10 +3,8 @@ import Game from '@/components/Game'
 import axios from "axios";
 import {GameData} from "@/models/interfaces/gameData.interface";
 import {useEffectFix} from "../src/helpers/useEffectUtils";
-
-function getRndInteger(min:number, max:number) {
-    return Math.floor(Math.random() * (max+1 - min) ) + min;
-}
+import {getQueryParams} from "../src/helpers/query";
+import { v4 as UID } from "uuid";
 
 const Home: React.FC = () => {
     const { execOnlyOnce } = useEffectFix();
@@ -17,13 +15,13 @@ const Home: React.FC = () => {
     useEffect(() => {
         execOnlyOnce(() => {
             if(gameData == null) {
-                const userMail = ""
-                let userId
+                let userMail: string
+                let userId :string = UID()
                 try {
-                    userId = parseInt(window.location.search.replace(/&?/, "").split("=")[1])
-                }catch (e){
-                    userId = getRndInteger(1,2)
-                }
+                    const params = getQueryParams(window.location.search)
+                    userMail = params.get("mail")
+                }catch (e){}
+
                 axios.post(`http://${process.env.NEXT_PUBLIC_BACK_URL}/session/launch`, {
                     "avatar": "",
                     "userId": userId
