@@ -100,6 +100,3 @@ affinity: {}
 envLocalConfigMap:
   name: env-local
   key: .env
-
-auth:
-  backUrl: leaddev.digitalseed.com/gameplay/api
