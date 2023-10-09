@@ -8,7 +8,9 @@ import {v4 as UID} from "uuid";
 import {signToken, TokenType, verifyToken} from "../src/helpers/token";
 import LoadingAnim from "@/components/Loading";
 import { Cookies } from 'react-cookie';
+import * as process from "process";
 
+console.log(process.env)
 interface DataRequiredLaunchSession{
     userMail: string
     userId: string
