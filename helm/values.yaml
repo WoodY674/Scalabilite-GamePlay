@@ -91,7 +91,7 @@ volumes:
 # Additional volumeMounts on the output Deployment definition.
 volumeMounts:
   - name: config
-    mountPath: /app/.env
+    mountPath: /app/
 
 # - name: foo
 #   mountPath: "/etc/foo"
