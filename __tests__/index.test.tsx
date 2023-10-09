@@ -1,17 +1,27 @@
 import '@testing-library/jest-dom'
+import {signToken, verifyToken, TokenType} from "../src/helpers/token";
 
-describe('Home', () => {
-	/*    it( 'renders a heading', () => {
-            render( <Home /> )
 
-            const heading = screen.getByRole( 'heading', {
-                name: /Home Page/i,
-            } )
+describe( 'token', () => {
+    const payload = {userId:"uid", mail:"test@gmail.com"}
+    /*
+    it( 'verify token success', () => {
+        const token = signToken(payload)
+        const tokenPayload = verifyToken(token, TokenType.Fake)
+        expect(tokenPayload.userId).toBe( payload.userId );
+        expect(tokenPayload.mail).toBe( payload.mail );
+    } );
 
-            expect( heading ).toBeInTheDocument()
-        } )*/
 
-	it('adds 1 + 2 to equal 3', () => {
-		expect(1 + 2).toBe(3)
+    it( 'verify token failure : bad pub key', () => {
+        const token = signToken(payload)
+        expect(() => {
+            verifyToken(token, TokenType.Real)
+        }).toThrow(Error);
+    } );
+    */
+
+	it('fake test', () => {
+		expect(1+2).toBe(3)
 	})
 })

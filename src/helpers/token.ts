@@ -1,4 +1,3 @@
-
 const jwt = require('jsonwebtoken');
 
 //keys are encoded in b64
@@ -17,12 +16,21 @@ export interface TokenPayload{
 }
 
 export function verifyToken(token: string, type:TokenType) :TokenPayload| never {
-    return jwt.verify(token, (type == TokenType.Fake ? pubkeyFake : pubkey),{ algorithms: 'RS256' }, function(err:Error, payload:any) {
+    const payload = jwt.verify(token, (type == TokenType.Fake ? pubkeyFake : pubkey),{ algorithms: 'RS256' }, function(err:Error, payload:any) {
         if(err != null){
-            throw err
+            return {err:err}
         }
         return payload
     });
+
+    if(payload.err != undefined){
+        throw new Error(`Can't verify the token ${payload}` )
+    }
+
+    if(payload.exp < Math.floor(Date.now() / 1000)){
+        throw new Error("Token expired")
+    }
+    return payload
 }
 export function signToken(payload:TokenPayload){
     return jwt.sign({...payload, exp: Math.floor(Date.now() / 1000) + (60 * 60),}, privateKeyFake, { algorithm: 'RS256' })

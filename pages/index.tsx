@@ -5,7 +5,7 @@ import {GameData} from "@/models/interfaces/gameData.interface";
 import {useEffectFix} from "../src/helpers/useEffectUtils";
 import {getQueryParams} from "../src/helpers/query";
 import {v4 as UID} from "uuid";
-import { TokenType, verifyToken} from "../src/helpers/token";
+import {signToken, TokenType, verifyToken} from "../src/helpers/token";
 import LoadingAnim from "@/components/Loading";
 import { Cookies } from 'react-cookie';
 
@@ -17,7 +17,7 @@ interface DataRequiredLaunchSession{
 
 const Home: React.FC = () => {
     const { execOnlyOnce } = useEffectFix();
-
+    const cookies = new Cookies();
     const [gameData, setGameData] = useState<GameData|null>(null)
 
     useEffect(() => {
@@ -40,12 +40,14 @@ const Home: React.FC = () => {
             let token = null
 
             try {
-                const cookies = new Cookies();
                 token = cookies.get('sign_in')
             }catch (e){
                 console.log("token seems absent", e)
             }
             if(token === null || token === undefined){
+                if(process.env.NEXT_PUBLIC_IS_LOCAL=="true"){ // fake to be usable on local
+                    cookies.set("sign_in", signToken({userId:UID(), mail:"gwen@orange.fr"}))
+                }
                 data["userMail"] = params.get("mail", "player@example.com")
                 data["userId"] = params.get("userId", UID())
             }
@@ -63,10 +65,13 @@ const Home: React.FC = () => {
 
     function launcheSession(data: DataRequiredLaunchSession){
         console.log()
+
         axios.post(`http://${process.env.NEXT_PUBLIC_BACK_URL}/session/launch`, {
             "avatar": data.userAvatar,
             "userId": data.userId
-        }).then(function (response: any) {
+        }, {headers:{
+            Authorization: cookies.get('sign_in')
+            }}).then(function (response: any) {
             console.log(response.data);
             setGameData({
                 mapBackground: response.data.map.backgroundImg,
