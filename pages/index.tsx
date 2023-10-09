@@ -5,8 +5,9 @@ import {GameData} from "@/models/interfaces/gameData.interface";
 import {useEffectFix} from "../src/helpers/useEffectUtils";
 import {getQueryParams} from "../src/helpers/query";
 import {v4 as UID} from "uuid";
-import {signToken, TokenType, verifyToken} from "../src/helpers/token";
+import { TokenType, verifyToken} from "../src/helpers/token";
 import LoadingAnim from "@/components/Loading";
+import { Cookies } from 'react-cookie';
 
 interface DataRequiredLaunchSession{
     userMail: string
@@ -36,7 +37,14 @@ const Home: React.FC = () => {
         }
         try {
             const params = getQueryParams(window.location.search)
-            let token = null // @TODO : read cookie, but from what
+            let token = null
+
+            try {
+                const cookies = new Cookies();
+                token = cookies.get('sign_in')
+            }catch (e){
+                console.log("token seems absent")
+            }
             if(token === null){
                 data["userMail"] = params.get("mail", "player@example.com")
                 data["userId"] = params.get("userId", UID())

@@ -1,20 +1,16 @@
-import { render, screen } from '@testing-library/react'
-import Home from '../pages/index'
-import '@testing-library/jest-dom'
-import { equals } from '@jest/expect-utils';
+import {signToken, TokenType, verifyToken} from "../src/helpers/token";
 
-describe( 'Home', () => {
-    /*    it( 'renders a heading', () => {
-            render( <Home /> )
+describe( 'token', () => {
+    const payload = {userId:"uid", mail:"test@gmail.com"}
 
-            const heading = screen.getByRole( 'heading', {
-                name: /Home Page/i,
-            } )
+    it( 'sign a token', () => {
+        expect( typeof signToken(payload) ).toBe(typeof "") ;
+    })
 
-            expect( heading ).toBeInTheDocument()
-        } )*/
-
-    it( 'adds 1 + 2 to equal 3', () => {
-        expect( 1 + 2 ).toBe( 3 );
+    it( 'verify token', () => {
+        const token = signToken(payload)
+        const tokenPayload = verifyToken(token, TokenType.Fake)
+        expect(tokenPayload.userId).toBe( payload.userId );
+        expect(tokenPayload.mail).toBe( payload.mail );
     } );
 } )
