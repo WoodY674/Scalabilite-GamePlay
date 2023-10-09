@@ -23,6 +23,15 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
+      initContainers:
+        - name: create-env-file
+          image: alpine:latest
+          command: [ "/bin/sh", "-c" ]
+          args:
+            - echo "$NEXT_PUBLIC_BACK_URL=$NEXT_PUBLIC_BACK_URL" > /app/.env
+          volumeMounts:
+            - name: config
+              mountPath: /app
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
