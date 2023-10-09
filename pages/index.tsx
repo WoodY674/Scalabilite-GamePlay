@@ -43,9 +43,9 @@ const Home: React.FC = () => {
                 const cookies = new Cookies();
                 token = cookies.get('sign_in')
             }catch (e){
-                console.log("token seems absent")
+                console.log("token seems absent", e)
             }
-            if(token === null){
+            if(token === null || token === undefined){
                 data["userMail"] = params.get("mail", "player@example.com")
                 data["userId"] = params.get("userId", UID())
             }
