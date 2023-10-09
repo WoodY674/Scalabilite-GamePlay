@@ -12,4 +12,4 @@ COPY . /app
 
 EXPOSE 4200
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]
