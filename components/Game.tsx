@@ -28,6 +28,17 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
     const myPlayerImage = new ImageCanva(player.avatar,'https://upload.wikimedia.org/wikipedia/en/9/9d/Slime_%28Dragon_Quest%29.png');
     const mapImage = new ImageCanva(gameData.mapBackground, 'https://i.pinimg.com/550x/d2/70/08/d27008765980c6a51cedcdaef8b74b2c.jpg');
 
+    useEffect(()=>{
+        const newImages = {...images}
+        treasures.forEach((treasure) => {
+            newImages.treasures[treasure.id.toString()] = new ImageCanva(treasure.img, 'https://cdn-icons-png.flaticon.com/512/4230/4230569.png')
+        });
+        otherPlayers.forEach((p) => {
+            newImages.otherPlayer[p.id.toString()] = new ImageCanva(p.avatar, "https://wikidragonquest.fr/images/thumb/c/c2/Soldat_squelette.png/280px-Soldat_squelette.png")
+        })
+        setImages(newImages)
+    }, [treasures, otherPlayers])
+
     useEffect(() => {
         //region canva init
 		const canvas = canvasRef.current
@@ -80,13 +91,6 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 
         const canvasWidth = canvas.width
         const canvasHeight = canvas.height
-
-        treasures.forEach((treasure) => {
-            images.treasures[treasure.id.toString()] = new ImageCanva(treasure.img, 'https://cdn-icons-png.flaticon.com/512/4230/4230569.png')
-        });
-        otherPlayers.forEach((p) => {
-            images.otherPlayer[p.id.toString()] = new ImageCanva(p.avatar, "https://wikidragonquest.fr/images/thumb/c/c2/Soldat_squelette.png/280px-Soldat_squelette.png")
-        })
 
 		const gameLoop = () => {
             // Calculate the camera position to center the player
@@ -178,19 +182,42 @@ const Game: React.FC<GameProps> = ({ gameData }) => {
 
 	return (
 		<div>
-            <div>Score : {score}</div>
-            <div style={{border:"3px black solid",
-                width:"400px", height:"400px",
-                display:"flex",
-                justifyContent:"center",
-                alignItems:"center",
-                overflow:"hidden",
-                background:"url(https://img.freepik.com/premium-vector/cartoon-wood-floor-tiles-pattern_172107-1063.jpg)"}}>
-                <canvas
-                    ref={canvasRef}
-                    width={gameData.width || 800}
-                    height={gameData.height || 800}
-                />
+            <div style={{display:"flex", justifyContent:"flex-start", alignItems:"baseline"}}>
+                <img src={myPlayerImage.src} style={{width:"30px", height:"30px"}} alt="your avatar"/>
+                <div>Player id : {player.userid}</div>
+            </div>
+            <div style={{display:"flex", justifyContent:"flex-start", alignItems:"baseline"}}>
+                <img src="https://cdn-icons-png.flaticon.com/512/4230/4230569.png" style={{width:"30px", height:"30px"}} alt="treasure img"/>
+                <div>Score : {score}</div>
+            </div>
+            <div style={{display:"flex", justifyContent:"space-between"}}>
+                <div style={{border:"3px black solid",
+                    width:`${Math.min(Math.max(400, gameData.width), 500)}px`,
+                    height:`${Math.min(Math.max(400, gameData.height), 500)}px`,
+                    display:"flex", justifyContent:"center", alignItems:"center",
+                    overflow:"hidden",
+                    background:"url(https://img.freepik.com/premium-vector/cartoon-wood-floor-tiles-pattern_172107-1063.jpg)"}}>
+                    <canvas
+                        ref={canvasRef}
+                        width={gameData.width || 800}
+                        height={gameData.height || 800}
+                    />
+                </div>
+                <div style={{marginLeft:"20px", width:"300px"}}>
+                    <div>Autres joueurs</div>
+                    <div style={{overflow: "scroll", height: "60vh"}}>
+                    {otherPlayers.length == Object.keys(images.otherPlayer).length
+                        ?
+                        Object.entries(otherPlayers).map(([key, p], i) => (
+                            <div id={p.userid} key={i} style={{display:"flex", justifyContent:"flex-start", alignItems:"baseline"}}>
+                                <img src={images.otherPlayer[p.id.toString()].src} style={{width:"30px", height:"30px"}} alt="player avatar"/>
+                                <div>Player {p.userid}</div>
+                            </div>
+                            ))
+                        : <></>
+                    }
+                    </div>
+                </div>
             </div>
 		</div>
 	)

@@ -9,21 +9,20 @@ export class QueryParams{
     }
 
     get(key:string, defaultVal:string=""){
-        try {
-            return this.params[ key ]
-        }catch ( e ){
-        }
-        return defaultVal
+        return (Object.keys(this.params).includes(key) ? this.params[key] : defaultVal)
     }
 }
 
 export function getQueryParams(url:string){
-    const paramsStr = url.split("?")[1]
-    const eachParams= paramsStr.split("&")
     const params = new QueryParams()
-    eachParams.forEach(el=>{
-        const item = el.split("=")
-        params.setVal(item[0], item[1])
-    })
+    try {
+        const paramsStr = url.split( "?" )[ 1 ]
+        const eachParams = paramsStr.split( "&" )
+        eachParams.forEach( el => {
+            const item = el.split( "=" )
+            params.setVal( item[ 0 ], item[ 1 ] )
+        } )
+    }catch ( e ){
+    }
     return params
 }
