@@ -38,15 +38,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ .Values.envLocalConfigMap.name }}
-          env:
-            - name: NEXT_PUBLIC_BACK_URL
-              value: {{ .Values.url.gameBack }}
-            - name: NEXT_PUBLIC_PRIV_KEY_FAKE
-              value: {{ .Values.token.fakePrivkey }}
-            - name: NEXT_PUBLIC_PUB_KEY_FAKE
-              value: {{ .Values.token.fakePubKey }}
-            - name: NEXT_PUBLIC_PUB_KEY
-              value: {{ .Values.token.pubkey }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
