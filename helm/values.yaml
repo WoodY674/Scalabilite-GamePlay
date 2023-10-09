@@ -100,3 +100,6 @@ affinity: {}
 envLocalConfigMap:
   name: env-local
   key: .env
+
+url:
+  gameBack: http://leaddev.digitalseeder.com/gameplay-api

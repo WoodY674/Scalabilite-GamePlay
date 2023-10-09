@@ -38,6 +38,9 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ .Values.envLocalConfigMap.name }}
+          env:
+            - name: NEXT_PUBLIC_BACK_URL
+              value: {{ .Values.url.gameBack }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
