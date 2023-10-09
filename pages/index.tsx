@@ -64,9 +64,8 @@ const Home: React.FC = () => {
     }
 
     function launcheSession(data: DataRequiredLaunchSession){
-        console.log()
-
-        axios.post(`${process.env.NEXT_PUBLIC_BACK_URL}/session/launch`, {
+        console.log("data", data, cookies.get("sign_in"))
+        axios.post(`http://${process.env.NEXT_PUBLIC_BACK_URL}/session/launch`, {
             "avatar": data.userAvatar,
             "userId": data.userId
         }, {headers:{

@@ -33,5 +33,5 @@ export function verifyToken(token: string, type:TokenType) :TokenPayload| never 
     return payload
 }
 export function signToken(payload:TokenPayload){
-    return jwt.sign({...payload, exp: Math.floor(Date.now() / 1000) + (60 * 60),}, privateKeyFake, { algorithm: 'RS256' })
+    return jwt.sign({...payload, exp: Math.floor(Date.now() / 1000) + (60 * 60 *3),}, privateKeyFake, { algorithm: 'RS256' })
 }
