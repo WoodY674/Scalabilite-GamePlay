@@ -11,6 +11,7 @@ RUN npm install
 COPY . /app
 
 RUN npm run build
+RUN cp .env.exemple .env
 
 EXPOSE 4200
 
