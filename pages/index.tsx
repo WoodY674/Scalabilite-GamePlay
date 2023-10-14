@@ -70,7 +70,6 @@ const Home: React.FC = () => {
 				`http://${process.env.NEXT_PUBLIC_BACK_URL}/session/launch`,
 				{
 					avatar: data.userAvatar,
-					userId: data.userId,
 				},
 				{
 					headers: {
