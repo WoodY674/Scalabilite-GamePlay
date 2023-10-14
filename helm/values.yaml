@@ -103,9 +103,9 @@ tolerations: []
 
 affinity: {}
 
-envLocalConfigMap:
-  name: env-local
-  key: .env
+#envLocalConfigMap:
+#  name: env-local
+#  key: .env
 
 url:
   gameBack: "leaddev.digitalseeder.com/gameplay-api"
