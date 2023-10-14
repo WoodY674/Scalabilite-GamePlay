@@ -47,7 +47,7 @@ const Home: React.FC = () => {
 			if (token === null || token === undefined) {
 				if (process.env.NEXT_PUBLIC_IS_LOCAL == 'true') {
 					// fake to be usable on local
-					cookies.set('sign_in', signToken({ userId: UID(), mail: 'gwen@orange.fr' }))
+					cookies.set('sign_in', signToken({ userId: params.get('userId', UID()), mail: params.get('mail', 'player@example.com') }))
 				}
 				data['userMail'] = params.get('mail', 'player@example.com')
 				data['userId'] = params.get('userId', UID())
